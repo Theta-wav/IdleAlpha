@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://animated-conkies-28764b.netlify.app/sitemap.xml

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading... | IdleAlpha</title>
+    <meta name="description" content="">
+    <meta property="og:title" content="">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="article">
+    <meta name="robots" content="index, follow">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Markdown Parser CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+
+    <!-- Sticky Navigation -->
+    <nav>
+        <a href="index.html" class="brand" style="text-decoration: none;">IdleAlpha.</a>
+        <div class="nav-links">
+            <a href="index.html#systems">Income Systems</a>
+        </div>
+        <a href="index.html#join" class="btn-primary" style="padding: 0.5rem 1.25rem;">Join Free</a>
+    </nav>
+
+    <div class="reader-layout">
+        <!-- Main Markdown Reader -->
+        <article class="reader-core">
+            <div id="meta-container" style="margin-bottom: 2rem; border-bottom: 1px solid var(--col-border); padding-bottom: 2rem;">
+                <span id="article-tag" class="card-tag">Loading...</span>
+                <h1 id="article-title" style="font-size: 3rem; margin: 1rem 0; line-height: 1.1;">Loading Engine Content...</h1>
+                <div class="card-footer" style="border: none; padding-top: 0; justify-content: flex-start; gap: 2rem;">
+                    <span id="article-date"></span>
+                    <span id="article-readTime"></span>
+                </div>
+            </div>
+            
+            <div id="markdown-content">
+                <!-- Injected via JS -->
+            </div>
+        </article>
+
+        <!-- Sticky Sidebar Ad Funnel -->
+        <aside class="sidebar-funnel">
+            <div class="sticky-ad">
+                <div class="ad-tag">SPONSORED</div>
+                <h3>Start Your 7-Figure Newsletter Today</h3>
+                <p>We use and recommend <strong>Beehiiv</strong> for all our AI-generated wealth operations. No coding required. 50% affiliate MRR.</p>
+                <a href="https://www.beehiiv.com?via=Billy-Bannigan" target="_blank" class="btn-primary" style="display: block; text-align: center; margin-top: 1.5rem; width: 100%;">Claim 30 Days Free</a>
+            </div>
+        </aside>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 IdleAlpha | Built by Antigravity CEO Swarm</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const titleQuery = urlParams.get('title');
+
+            if (!titleQuery) {
+                document.getElementById('article-title').innerText = "Article Not Found.";
+                return;
+            }
+
+            try {
+                const response = await fetch('data/articles.json');
+                const articles = await response.json();
+                
+                // Find matching article ignoring case and spaces
+                const targetArticle = articles.find(a => 
+                    a.title.replace(/[\W_]+/g,"").toLowerCase() === titleQuery.replace(/[\W_]+/g,"").toLowerCase()
+                ) || articles[0]; // fallback to latest if param fails
+
+                // Inject SEO meta tags dynamically (critical for Google)
+                document.title = targetArticle.title + " | IdleAlpha";
+                document.querySelector('meta[name="description"]').setAttribute('content', targetArticle.excerpt || '');
+                document.querySelector('meta[property="og:title"]').setAttribute('content', targetArticle.title);
+                document.querySelector('meta[property="og:description"]').setAttribute('content', targetArticle.excerpt || '');
+
+                // Populate UI
+                document.getElementById('article-tag').innerText = targetArticle.tag;
+                document.getElementById('article-title').innerText = targetArticle.title;
+                document.getElementById('article-date').innerText = targetArticle.date;
+                document.getElementById('article-readTime').innerText = targetArticle.readTime;
+                
+                // Parse markdown into HTML
+                document.getElementById('markdown-content').innerHTML = marked.parse(targetArticle.content || "Content failed to render.");
+
+            } catch (e) {
+                console.error("Reader API fetching error: ", e);
+                document.getElementById('markdown-content').innerHTML = "Failed to load database. Is the server running?";
+            }
+        });
+    </script>
+</body>
+</html>
+
