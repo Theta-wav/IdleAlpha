@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://animated-conkies-28764b.netlify.app/sitemap.xml
+Sitemap: https://Theta-wav.github.io/IdleAlpha/sitemap.xml
